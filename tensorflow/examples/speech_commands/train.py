@@ -113,8 +113,8 @@ def main(_):
   # example --how_many_training_steps=10000,3000 --learning_rate=0.001,0.0001
   # will run 13,000 training loops in total, with a rate of 0.001 for the first
   # 10,000, and 0.0001 for the final 3,000.
-  training_steps_list = map(int, FLAGS.how_many_training_steps.split(','))
-  learning_rates_list = map(float, FLAGS.learning_rate.split(','))
+  training_steps_list = list(map(int, FLAGS.how_many_training_steps.split(',')))
+  learning_rates_list = list(map(float, FLAGS.learning_rate.split(',')))
   if len(training_steps_list) != len(learning_rates_list):
     raise Exception(
         '--how_many_training_steps and --learning_rate must be equal length '
@@ -192,7 +192,7 @@ def main(_):
 
   # Training loop.
   training_steps_max = np.sum(training_steps_list)
-  for training_step in xrange(start_step, training_steps_max + 1):
+  for training_step in range(start_step, training_steps_max + 1):
     # Figure out what the current learning rate is.
     training_steps_sum = 0
     for i in range(len(training_steps_list)):
@@ -225,7 +225,7 @@ def main(_):
       set_size = audio_processor.set_size('validation')
       total_accuracy = 0
       total_conf_matrix = None
-      for i in xrange(0, set_size, FLAGS.batch_size):
+      for i in range(0, set_size, FLAGS.batch_size):
         validation_fingerprints, validation_ground_truth = (
             audio_processor.get_data(FLAGS.batch_size, i, model_settings, 0.0,
                                      0.0, 0, 'validation', sess))
@@ -261,7 +261,7 @@ def main(_):
   tf.logging.info('set_size=%d', set_size)
   total_accuracy = 0
   total_conf_matrix = None
-  for i in xrange(0, set_size, FLAGS.batch_size):
+  for i in range(0, set_size, FLAGS.batch_size):
     test_fingerprints, test_ground_truth = audio_processor.get_data(
         FLAGS.batch_size, i, model_settings, 0.0, 0.0, 0, 'testing', sess)
     test_accuracy, conf_matrix = sess.run(
